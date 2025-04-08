@@ -1,0 +1,43 @@
+---
+
+---
+
+<button
+    id="theme-toggle"
+    class="p-2 rounded border border-gray-300 dark:border-gray-600"
+    aria-label="Toggle theme"
+>
+    Toggle Theme
+</button>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const toggleButton = document.getElementById("theme-toggle");
+
+        function applyTheme(theme: string) {
+            const enableDark = theme === "dark";
+            document.documentElement.classList.toggle("dark", enableDark);
+        }
+
+        function initTheme() {
+            const savedTheme = localStorage.getItem("theme");
+            const prefersDark = window.matchMedia(
+                "(prefers-color-scheme: dark)",
+            ).matches;
+            const theme = savedTheme || (prefersDark ? "dark" : "light");
+            applyTheme(theme);
+        }
+
+        if (toggleButton) {
+            toggleButton.addEventListener("click", () => {
+                const isDark =
+                    document.documentElement.classList.contains("dark");
+                const newTheme = isDark ? "light" : "dark";
+                applyTheme(newTheme);
+                localStorage.setItem("theme", newTheme);
+            });
+        }
+
+        initTheme();
+    });
+</script>

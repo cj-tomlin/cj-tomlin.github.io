@@ -1,11 +1,70 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardFooter,
+	CardHeader,
+	CardTitle,
+} from "@/components/starwind/card";
+import { Button } from "@/components/starwind/button";
+import { Input } from "@/components/starwind/input";
+import { Label } from "@/components/starwind/label";
+import {
+	Select,
+	SelectTrigger,
+	SelectValue,
+	SelectContent,
+	SelectItem,
+	SelectGroup,
+	SelectLabel,
+	SelectSeparator,
+} from "@/components/starwind/select";
+import Layout from "../layouts/Layout.astro";
 ---
 
 <Layout>
-	<Welcome />
+	<div class="flex flex-col p-6">
+		<Card class="w-[400px]" slot="preview">
+			<CardHeader>
+				<CardTitle>Create project</CardTitle>
+				<CardDescription
+					>Deploy your new project in one-click.</CardDescription
+				>
+			</CardHeader>
+			<CardContent class="flex flex-col gap-4">
+				<div class="flex w-full flex-col gap-2">
+					<Label for="name">Name</Label>
+					<Input
+						type="text"
+						id="name"
+						placeholder="Name of your project"
+					/>
+				</div>
+				<div class="flex w-full flex-col gap-2">
+					<Label for="framework">Framework</Label>
+					<Select id="framework">
+						<SelectTrigger class="w-full" required>
+							<SelectValue placeholder="Select" />
+						</SelectTrigger>
+						<SelectContent class="w-full">
+							<SelectGroup>
+								<SelectLabel>Frameworks</SelectLabel>
+								<SelectItem value="astro">Astro</SelectItem>
+								<SelectItem value="next">Next.js</SelectItem>
+								<SelectItem value="svelte">SvelteKit</SelectItem
+								>
+								<SelectItem value="solid">SolidStart</SelectItem
+								>
+							</SelectGroup>
+						</SelectContent>
+					</Select>
+				</div>
+			</CardContent>
+			<CardFooter class="flex justify-between">
+				<Button variant="outline">Cancel</Button>
+				<Button type="submit">Deploy</Button>
+			</CardFooter>
+		</Card>
+	</div>
 </Layout>
