@@ -1,0 +1,24 @@
+---
+import Social from "./Social.astro";
+---
+
+<footer class="p-4 text-sm text-muted-foreground">
+    <div class="mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div class="space-y-4">
+            <h4 class="font-semibold text-foreground">About</h4>
+            <p>
+                This is my personal portfolio and blog built with Astro,
+                StarwindUI, and Tailwind CSS.
+            </p>
+            <p>&copy; 2025 Chris Tomlin. All rights reserved.</p>
+        </div>
+
+        <div class="space-y-4">
+            <h4 class="font-semibold text-foreground">Connect</h4>
+            <div class="flex flex-wrap gap-2">
+                <Social platform="github" username="cj-tomlin" />
+                <Social platform="linkedin" username="tomlinc" />
+            </div>
+        </div>
+    </div>
+</footer>

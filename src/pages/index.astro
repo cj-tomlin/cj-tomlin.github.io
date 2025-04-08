@@ -1,30 +1,11 @@
 ---
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardFooter,
-	CardHeader,
-	CardTitle,
-} from "@/components/starwind/card";
-import { Button } from "@/components/starwind/button";
-import { Input } from "@/components/starwind/input";
-import { Label } from "@/components/starwind/label";
-import {
-	Select,
-	SelectTrigger,
-	SelectValue,
-	SelectContent,
-	SelectItem,
-	SelectGroup,
-	SelectLabel,
-	SelectSeparator,
-} from "@/components/starwind/select";
 import Layout from "@/layouts/Layout.astro";
 import Navigation from "@/components/Navigation.astro";
+import Badge from "@/components/starwind/badge";
+const pageTitle = "Chris Tomlin Portfio";
 ---
 
-<Layout>
+<Layout pageTitle={pageTitle}>
 	<span slot="nav">
 		<!--
   			Example: To override the default navigation links, uncomment below and customize the links.
@@ -38,48 +19,41 @@ import Navigation from "@/components/Navigation.astro";
 		<Navigation />
 	</span>
 
-	<!-- Page content -->
-	<div class="flex flex-col p-6">
-		<Card class="w-[400px]" slot="preview">
-			<CardHeader>
-				<CardTitle>Create project</CardTitle>
-				<CardDescription>
-					Deploy your new project in one-click.
-				</CardDescription>
-			</CardHeader>
-			<CardContent class="flex flex-col gap-4">
-				<div class="flex w-full flex-col gap-2">
-					<Label for="name">Name</Label>
-					<Input
-						type="text"
-						id="name"
-						placeholder="Name of your project"
-					/>
-				</div>
-				<div class="flex w-full flex-col gap-2">
-					<Label for="framework">Framework</Label>
-					<Select id="framework">
-						<SelectTrigger class="w-full" required>
-							<SelectValue placeholder="Select" />
-						</SelectTrigger>
-						<SelectContent class="w-full">
-							<SelectGroup>
-								<SelectLabel>Frameworks</SelectLabel>
-								<SelectItem value="astro">Astro</SelectItem>
-								<SelectItem value="next">Next.js</SelectItem>
-								<SelectItem value="svelte">SvelteKit</SelectItem
-								>
-								<SelectItem value="solid">SolidStart</SelectItem
-								>
-							</SelectGroup>
-						</SelectContent>
-					</Select>
-				</div>
-			</CardContent>
-			<CardFooter class="flex justify-between">
-				<Button variant="outline">Cancel</Button>
-				<Button type="submit">Deploy</Button>
-			</CardFooter>
-		</Card>
+	<div class="flex divide-x divide-gray-300 dark:divide-gray-700 p-6">
+		<div class="w-full md:w-1/4 p-4">
+			<h2 class="text-lg font-bold uppercase mb-4">About</h2>
+			<p>
+				Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis,
+				atque. Eum beatae quidem eaque? Quaerat, facilis, eaque quia
+				maiores totam, vitae numquam aperiam debitis at veniam unde nisi
+				modi ipsum!
+			</p>
+			<h3 class="text-md font-bold uppercase mb-2 mt-4">Technologies</h3>
+			<div class="flex flex-wrap gap-2 mb-4">
+				<Badge variant="info">Astro</Badge>
+				<Badge variant="primary">Tailwind CSS</Badge>
+				<Badge variant="secondary">JavaScript</Badge>
+				<Badge variant="success">TypeScript</Badge>
+				<Badge variant="warning">Node.js</Badge>
+			</div>
+		</div>
+		<div class="w-full md:w-1/4 p-4">
+			<h2 class="text-lg font-bold uppercase mb-4">Projects</h2>
+			<p>
+				Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis,
+				atque. Eum beatae quidem eaque? Quaerat, facilis, eaque quia
+				maiores totam, vitae numquam aperiam debitis at veniam unde nisi
+				modi ipsum!
+			</p>
+		</div>
+		<div class="w-full md:w-1/2 p-4">
+			<h2 class="text-lg font-bold uppercase mb-4">Project Details</h2>
+			<p>
+				Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis,
+				atque. Eum beatae quidem eaque? Quaerat, facilis, eaque quia
+				maiores totam, vitae numquam aperiam debitis at veniam unde nisi
+				modi ipsum!
+			</p>
+		</div>
 	</div>
 </Layout>
