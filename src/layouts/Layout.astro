@@ -1,6 +1,7 @@
 ---
 import "@/styles/starwind.css";
 import Header from "@/components/Header.astro";
+import SectionDivider from "@/components/SectionDivider.astro";
 ---
 
 <!doctype html>
@@ -17,6 +18,8 @@ import Header from "@/components/Header.astro";
 			<slot name="nav" slot="nav" />
 		</Header>
 		<slot />
+		<SectionDivider />
+		<!-- <Footer /> -->
 	</body>
 </html>
 
