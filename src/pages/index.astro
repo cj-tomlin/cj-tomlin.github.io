@@ -20,17 +20,32 @@ import {
 	SelectLabel,
 	SelectSeparator,
 } from "@/components/starwind/select";
-import Layout from "../layouts/Layout.astro";
+import Layout from "@/layouts/Layout.astro";
+import Navigation from "@/components/Navigation.astro";
 ---
 
 <Layout>
+	<span slot="nav">
+		<!--
+  			Example: To override the default navigation links, uncomment below and customize the links.
+  			When children are provided, the default links inside Navigation.astro will be replaced.
+		-->
+		<!-- <Navigation>
+			<a href="/" class="btn uppercase font-semibold">Home</a>
+			<a href="/about" class="btn uppercase font-semibold">About</a>
+			<a href="/contact" class="btn uppercase font-semibold">Contact</a>
+		</Navigation> -->
+		<Navigation />
+	</span>
+
+	<!-- Page content -->
 	<div class="flex flex-col p-6">
 		<Card class="w-[400px]" slot="preview">
 			<CardHeader>
 				<CardTitle>Create project</CardTitle>
-				<CardDescription
-					>Deploy your new project in one-click.</CardDescription
-				>
+				<CardDescription>
+					Deploy your new project in one-click.
+				</CardDescription>
 			</CardHeader>
 			<CardContent class="flex flex-col gap-4">
 				<div class="flex w-full flex-col gap-2">

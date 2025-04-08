@@ -1,12 +1,19 @@
 ---
-import Navigation from "./Navigation.astro";
 import ThemeToggle from "./ThemeToggle.astro";
 ---
 
-<header>
-    <nav>
-        <div>Header</div>
-        <Navigation />
-        <ThemeToggle />
-    </nav>
+<header class="flex flex-col">
+    <div
+        class="flex items-center justify-between p-4 gap-4 border-b border-gray-300 dark:border-gray-700"
+    >
+        <div class="flex items-center gap-4">
+            <ThemeToggle />
+            <slot name="nav" />
+            <!-- Future components can be added here -->
+        </div>
+        <div class="flex items-center gap-4"></div>
+    </div>
+    <div class="p-4 text-center">
+        <h1 class="text-2xl font-bold">Portfolio</h1>
+    </div>
 </header>

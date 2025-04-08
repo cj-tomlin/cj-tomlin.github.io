@@ -3,5 +3,8 @@
 ---
 
 <div class="flex gap-2">
-    <a href="/"> Navigation </a>
+    <slot>
+        <a href="/" class="btn uppercase font-semibold">Home</a>
+        <a href="/blog/" class="btn uppercase font-semibold">Blog</a>
+    </slot>
 </div>
