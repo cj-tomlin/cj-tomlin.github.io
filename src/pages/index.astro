@@ -2,6 +2,7 @@
 import Layout from "@/layouts/Layout.astro";
 import Navigation from "@/components/Navigation.astro";
 import Badge from "@/components/starwind/badge";
+import Link from "@/components/Link.astro";
 const pageTitle = "Chris Tomlin Portfio";
 ---
 
@@ -20,7 +21,7 @@ const pageTitle = "Chris Tomlin Portfio";
 	</span>
 
 	<div
-		class="flex divide-x divide-[var(--border)] dark:divide-[var(--border)] p-6"
+		class="flex divide-x-[2px] divide-[var(--border)] dark:divide-[var(--border)] p-6"
 	>
 		<div class="w-full md:w-1/4 p-4 overflow-auto h-full">
 			<h2 class="text-lg font-bold uppercase mb-4">About</h2>
@@ -43,43 +44,47 @@ const pageTitle = "Chris Tomlin Portfio";
 			<h2 class="text-lg font-bold uppercase mb-4">Projects</h2>
 			<div
 				id="project-list"
-				class="flex flex-col divide-y divide-[var(--border)] dark:divide-[var(--border)] border-t border-b border-[var(--border)] dark:border-[var(--border)]"
+				class="flex flex-col divide-y-[2px] divide-[var(--border)] dark:divide-[var(--border)] border-t-[2px] border-b-[2px] border-[var(--border)] dark:border-[var(--border)]"
 			>
 				<div
-					class="p-2 cursor-pointer font-bold uppercase transition-all duration-500 ease-in-out ml-2 text-[var(--primary)]"
+					class="p-2 cursor-pointer flex justify-between items-center transition-all duration-500 ease-in-out ml-2 text-[var(--primary)]"
 					data-project="portfolio"
 				>
-					Portfolio Website
+					<span class="font-bold uppercase">Portfolio Website</span>
+					<span class="text-xs uppercase">Web Dev</span>
 				</div>
 				<div
-					class="p-2 cursor-pointer font-bold uppercase transition-all duration-500 ease-in-out"
+					class="p-2 cursor-pointer flex justify-between items-center transition-all duration-500 ease-in-out"
 					data-project="ecommerce"
 				>
-					E-commerce Platform
+					<span class="font-bold uppercase">E-commerce Platform</span>
+					<span class="text-xs uppercase">E-commerce</span>
 				</div>
 				<div
-					class="p-2 cursor-pointer font-bold uppercase transition-all duration-500 ease-in-out"
+					class="p-2 cursor-pointer flex justify-between items-center transition-all duration-500 ease-in-out"
 					data-project="blog"
 				>
-					Blog Engine
+					<span class="font-bold uppercase">Blog Engine</span>
+					<span class="text-xs uppercase">Content</span>
 				</div>
 			</div>
 		</div>
 		<div class="w-full md:w-1/2 p-4">
-			<h2 class="text-lg font-bold uppercase mb-4">Project Details</h2>
-			<div class="flex gap-4 mb-4">
-				<button
-					id="info-toggle"
-					class="px-3 py-1 border rounded hover:bg-[var(--muted)] dark:hover:bg-[var(--muted)] transition-colors duration-200"
-					>Info</button
-				>
-				<a
-					id="github-link"
-					href="#"
-					target="_blank"
-					class="px-3 py-1 border rounded hover:bg-[var(--muted)] dark:hover:bg-[var(--muted)] transition-colors duration-200"
-					>GitHub</a
-				>
+			<div class="flex justify-between items-center mb-4">
+				<h2 class="text-lg font-bold uppercase">Project Details</h2>
+				<div class="flex gap-4">
+					<Link id="info-toggle" type="button" class="uppercase">
+						<span slot="text">Info</span>
+					</Link>
+					<Link
+						id="github-link"
+						href="#"
+						target="_blank"
+						class="uppercase"
+					>
+						<span slot="text">GitHub↗</span>
+					</Link>
+				</div>
 			</div>
 			<div id="project-details" class="h-full overflow-auto">
 				<p>Select a project to see details here.</p>
@@ -134,7 +139,9 @@ const pageTitle = "Chris Tomlin Portfio";
 			let showingInfo = false;
 
 			list.addEventListener("click", (e) => {
-				const target = e.target as HTMLElement | null;
+				const target = (e.target as HTMLElement | null)?.closest(
+					"[data-project]",
+				);
 				if (!target) return;
 
 				const projectKey = target.getAttribute("data-project") as
