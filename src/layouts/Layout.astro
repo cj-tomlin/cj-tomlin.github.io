@@ -10,16 +10,18 @@ const { pageTitle } = Astro.props;
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
 		<title>{pageTitle}</title>
 	</head>
-	<body class="w-screen overflow-x-hidden m-0 p-0 flex flex-col h-screen">
+	<body
+		class="flex overflow-x-hidden flex-col p-0 m-0 w-screen h-screen max-w-[1440px] mx-auto px-4"
+	>
 		<Header class="flex-shrink-0" style="flex-shrink:0;">
 			<slot name="nav" slot="nav" />
 		</Header>
-		<main class="flex-1 overflow-hidden flex">
+		<main>
 			<slot />
 		</main>
 		<SectionDivider class="flex-shrink-0" style="flex-shrink:0;" />

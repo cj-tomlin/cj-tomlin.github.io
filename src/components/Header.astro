@@ -5,16 +5,16 @@ import Button from "@/components/starwind/button";
 ---
 
 <header class="flex flex-col">
-    <div class="flex items-center justify-between p-4 gap-4">
-        <div class="flex items-center gap-4">
+    <div class="flex gap-4 justify-between items-center p-4">
+        <div class="flex gap-4 items-center">
             <ThemeToggle />
             <slot name="nav" />
             <!-- Future components can be added here -->
         </div>
-        <div class="flex items-center gap-4">
+        <div class="flex gap-4 items-center">
             <Button
                 variant="outline"
-                class="contact-outline uppercase font-bold">Contact</Button
+                class="font-bold uppercase contact-outline">Contact</Button
             >
         </div>
     </div>
@@ -22,7 +22,7 @@ import Button from "@/components/starwind/button";
         <SectionDivider />
 
         <h1
-            class="p-2 w-full text-center text-7xl font-bold text-foreground tracking-tighter uppercase"
+            class="p-2 w-full text-7xl font-bold tracking-tighter text-center uppercase text-foreground"
             style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; transform: scaleX(1.5); display: inline-block;"
         >
             Chris Tomlin
