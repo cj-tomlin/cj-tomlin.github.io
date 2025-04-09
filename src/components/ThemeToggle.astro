@@ -6,7 +6,7 @@
     id="theme-toggle"
     aria-label="Toggle theme"
     title="Toggle theme"
-    class="rounded-full p-2 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary"
+    class="rounded-full p-2 hover:bg-[var(--muted)] dark:hover:bg-[var(--muted)] transition-colors duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
 >
     <svg width="30px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
         <path
@@ -28,7 +28,7 @@
         background: none;
     }
     .sun {
-        fill: black;
+        fill: var(--foreground);
     }
     .moon {
         fill: transparent;
@@ -38,7 +38,7 @@
         fill: transparent;
     }
     :global(.dark) .moon {
-        fill: white;
+        fill: var(--foreground);
     }
 </style>
 
