@@ -16,16 +16,16 @@ const { pageTitle } = Astro.props;
 		<title>{pageTitle}</title>
 	</head>
 	<body
-		class="flex overflow-x-hidden flex-col p-0 m-0 w-screen h-screen max-w-[1440px] mx-auto px-4"
+		class="flex overflow-x-hidden flex-col p-0 m-0 w-screen md:h-screen md:overflow-hidden"
 	>
 		<Header class="flex-shrink-0" style="flex-shrink:0;">
 			<slot name="nav" slot="nav" />
 		</Header>
-		<main>
+		<main class="md:flex-1 md:flex md:flex-col md:overflow-hidden">
 			<slot />
 		</main>
-		<SectionDivider class="flex-shrink-0" style="flex-shrink:0;" />
-		<Footer class="flex-shrink-0" style="flex-shrink:0;" />
+		<SectionDivider class="md:flex-shrink-0" style="flex-shrink:0;" />
+		<Footer class="md:flex-shrink-0" style="flex-shrink:0;" />
 	</body>
 </html>
 
