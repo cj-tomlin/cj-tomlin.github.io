@@ -108,9 +108,7 @@ function setup() {
             if (!currentProject) return;
             showInfo = !showInfo;
             renderProjectDetails(currentProject, showInfo);
-            updateInfoButtonText();
         });
-        updateInfoButtonText();
     }
 }
 
