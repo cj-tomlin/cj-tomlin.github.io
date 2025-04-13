@@ -4,7 +4,7 @@ import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
 	site: 'https://cj-tomlin.github.io',
-	base: '/portfolio/',
+	base: '/',
 	experimental: {
 		svg: true,
 	},
