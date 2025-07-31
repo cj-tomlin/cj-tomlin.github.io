@@ -114,9 +114,3 @@ Inside of your Astro project, you'll see the following folders and files:
 ## 🚀 Deployment
 
 The site automatically deploys to GitHub Pages via GitHub Actions when you push to the `main` branch.
-
-## 📧 Contact
-
-- **Email**: [tomlinc@proton.me](mailto:tomlinc@proton.me)
-- **GitHub**: [cj-tomlin](https://github.com/cj-tomlin)
-- **LinkedIn**: [christomlin](https://linkedin.com/in/christomlin)
