@@ -1,16 +1,20 @@
-# Astro Starter Kit: Basics
+# CJ Tomlin - Portfolio
 
-```sh
-npm create astro@latest -- --template basics
-```
+A modern, fast, and accessible portfolio website built with Astro, showcasing my projects and blog posts.
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/basics)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/basics)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/basics/devcontainer.json)
+🌐 **Live Site**: [https://cj-tomlin.github.io](https://cj-tomlin.github.io)
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## ✨ Features
 
-![just-the-basics](https://github.com/withastro/astro/assets/2244813/a0a5533c-a856-4198-8470-2d67b1d7c554)
+- **⚡ Lightning Fast** - Built with Astro for optimal performance
+- **🎨 Modern Design** - Clean, professional UI with StarwindUI components
+- **🌙 Dark Mode** - Automatic theme switching with system preference detection
+- **📱 Fully Responsive** - Optimized for all devices and screen sizes
+- **♿ Accessible** - WCAG compliant with proper ARIA labels and keyboard navigation
+- **🔍 SEO Optimized** - Complete meta tags, Open Graph, Twitter cards, and structured data
+- **📄 Content Management** - Blog posts and projects managed with Astro Content Collections
+- **🎭 Smooth Animations** - Page load transitions and hover effects
+- **🗺️ Sitemap & Robots.txt** - Automatic generation for search engines
 
 ## 🚀 Project Structure
 
@@ -18,31 +22,101 @@ Inside of your Astro project, you'll see the following folders and files:
 
 ```text
 /
+├── .github/
+│   └── workflows/
+│       └── deploy.yml          # GitHub Actions deployment
 ├── public/
-│   └── favicon.svg
+│   ├── favicon.svg             # Site favicon
+│   ├── og-image.jpg            # Social media preview image
+│   └── robots.txt              # Search engine crawling rules
 ├── src/
+│   ├── components/
+│   │   ├── starwind/           # StarwindUI components
+│   │   ├── BlogPostCard.astro  # Reusable blog post card
+│   │   ├── ProjectCard.astro   # Reusable project card
+│   │   ├── InfiniteScroll.astro # Infinite scroll component
+│   │   ├── Navbar.astro        # Navigation component
+│   │   ├── ThemeToggle.astro   # Dark/light mode toggle
+│   │   └── SEO.astro           # SEO meta tags component
+│   ├── content/
+│   │   ├── blog/               # Blog post markdown files
+│   │   ├── projects/           # Project markdown files
+│   │   └── config.ts           # Content collections schema
 │   ├── layouts/
-│   │   └── Layout.astro
-│   └── pages/
-│       └── index.astro
-└── package.json
+│   │   └── Layout.astro        # Base page layout
+│   ├── pages/
+│   │   ├── api/                # API endpoints for infinite scroll
+│   │   ├── blog/               # Blog pages
+│   │   ├── index.astro         # Homepage
+│   │   ├── projects.astro      # Projects listing
+│   │   └── 404.astro           # 404 error page
+│   └── styles/
+│       ├── global.css          # Global styles and animations
+│       └── starwind.css        # StarwindUI theme configuration
+├── astro.config.mjs            # Astro configuration
+├── tailwind.config.cjs         # Tailwind CSS configuration
+└── tsconfig.json               # TypeScript configuration
 ```
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+## 🛠️ Tech Stack
 
-## 🧞 Commands
+- **[Astro](https://astro.build)** - Static site generator with partial hydration
+- **[Tailwind CSS](https://tailwindcss.com)** - Utility-first CSS framework
+- **[StarwindUI](https://starwind.dev)** - Component library for consistent UI
+- **[TypeScript](https://www.typescriptlang.org)** - Type-safe JavaScript
+- **[MDX](https://mdxjs.com)** - Markdown with JSX for rich content
+- **GitHub Actions** - Automated deployment to GitHub Pages
 
-All commands are run from the root of the project, from a terminal:
+## 🚀 Getting Started
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/cj-tomlin/cj-tomlin.github.io.git
+   cd cj-tomlin.github.io
+   ```
 
-## 👀 Want to learn more?
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+3. **Start development server**
+   ```bash
+   npm run dev
+   ```
+
+4. **Open your browser**
+   Navigate to `http://localhost:4321`
+
+## 📝 Development Commands
+
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start development server |
+| `npm run build` | Build for production |
+| `npm run preview` | Preview production build |
+| `npm run astro check` | Check for TypeScript errors |
+
+## 📄 Content Management
+
+### Adding Blog Posts
+
+1. Create a new `.md` file in `src/content/blog/`
+2. Add frontmatter with title, excerpt, publishDate, and tags
+3. Write your content in Markdown
+
+### Adding Projects
+
+1. Create a new `.md` file in `src/content/projects/`
+2. Add frontmatter with title, description, link, and tags
+3. Describe your project in Markdown
+
+## 🚀 Deployment
+
+The site automatically deploys to GitHub Pages via GitHub Actions when you push to the `main` branch.
+
+## 📧 Contact
+
+- **Email**: [tomlinc@proton.me](mailto:tomlinc@proton.me)
+- **GitHub**: [cj-tomlin](https://github.com/cj-tomlin)
+- **LinkedIn**: [christomlin](https://linkedin.com/in/christomlin)

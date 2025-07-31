@@ -1,17 +1,86 @@
-html {
-    box-sizing: border-box;
-}
+@import "tailwindcss";
 
-*,
-*::before,
-*::after {
-    box-sizing: inherit;
-}
+/* Subtle background gradients for visual depth */
+@layer base {
 
-@font-face {
-    font-family: 'Montserrat Black';
-    src: url('/fonts/MontserratBlack.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-    font-display: swap;
+    /* Light mode gradient - enhanced visibility with warm tones */
+    :root {
+        --gradient-light: linear-gradient(135deg,
+                rgba(255, 255, 255, 1) 0%,
+                rgba(255, 248, 240, 1) 25%,
+                rgba(251, 229, 197, 0.7) 50%,
+                rgba(255, 255, 255, 1) 100%);
+    }
+
+    /* Dark mode gradient - subtle cool tones with warm hints */
+    .dark {
+        --gradient-dark: linear-gradient(135deg,
+                rgba(23, 23, 23, 1) 0%,
+                rgba(28, 25, 23, 0.9) 25%,
+                rgba(41, 37, 36, 0.6) 50%,
+                rgba(23, 23, 23, 1) 100%);
+    }
+
+    /* Apply gradient to body */
+    body {
+        background: var(--gradient-light);
+        background-attachment: fixed;
+    }
+
+    .dark body {
+        background: var(--gradient-dark);
+        background-attachment: fixed;
+    }
+
+    /* Page load animations */
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+    }
+
+    /* Animation utility classes */
+    .animate-fade-in {
+        animation: fadeIn 0.6s ease-out;
+    }
+
+    .animate-fade-in-up {
+        animation: fadeInUp 0.6s ease-out;
+    }
+
+    .animate-delay-100 {
+        animation-delay: 0.1s;
+        animation-fill-mode: both;
+    }
+
+    .animate-delay-200 {
+        animation-delay: 0.2s;
+        animation-fill-mode: both;
+    }
+
+    .animate-delay-300 {
+        animation-delay: 0.3s;
+        animation-fill-mode: both;
+    }
+
+    .animate-delay-400 {
+        animation-delay: 0.4s;
+        animation-fill-mode: both;
+    }
 }

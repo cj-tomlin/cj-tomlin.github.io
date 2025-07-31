@@ -1,204 +1,101 @@
 ---
+import { getCollection, type CollectionEntry } from "astro:content";
 import Layout from "@/layouts/Layout.astro";
-import Navigation from "@/components/Navigation.astro";
-import Badge from "@/components/starwind/badge";
-import Link from "@/components/Link.astro";
-import {
-	Accordion,
-	AccordionContent,
-	AccordionItem,
-	AccordionTrigger,
-} from "@/components/starwind/accordion";
-const pageTitle = "Chris Tomlin Portfolio";
+import BlogPostCard from "@/components/BlogPostCard.astro";
+import ProjectCard from "@/components/ProjectCard.astro";
 
-// Sample projects array
-const projects = [
-	{
-		id: "astro-portfolio",
-		title: "Astro Portfolio",
-		subtitle: "Personal website",
-		description:
-			"A fast, modern portfolio site using Astro and Tailwind CSS.",
-		github: "https://github.com/yourusername/astro-portfolio",
-		images: [
-			"https://placehold.co/600x400?text=Hello+World",
-			"https://placehold.co/600x400?text=Second+Image",
-		],
-	},
-	{
-		id: "node-api",
-		title: "Node API",
-		subtitle: "RESTful API with Node.js",
-		description: "A scalable REST API built with Express and TypeScript.",
-		github: "https://github.com/yourusername/node-api",
-		images: [
-			"https://placehold.co/600x400?text=Hello+World",
-			"https://placehold.co/600x400?text=API+Image+2",
-		],
-	},
-	// Add more projects as needed
-];
+// Type definitions for content collections
+type ProjectEntry = CollectionEntry<"projects">;
+type BlogEntry = CollectionEntry<"blog">;
 
-const projectsJson = JSON.stringify(projects).replace(/</g, "\\u003c");
+// Get all blog posts and projects
+const allPosts = await getCollection("blog");
+const allProjects = await getCollection("projects");
+
+// Filter and sort blog posts, limit to 2 latest
+const posts: BlogEntry[] = allPosts
+	.filter((post: BlogEntry) => !post.data.draft)
+	.sort(
+		(a: BlogEntry, b: BlogEntry) =>
+			b.data.publishDate.valueOf() - a.data.publishDate.valueOf(),
+	)
+	.slice(0, 2);
+
+// Sort projects by date, limit to 4 latest
+const projects: ProjectEntry[] = allProjects
+	.sort((a: ProjectEntry, b: ProjectEntry) => {
+		const dateA = a.data.date?.valueOf() ?? 0;
+		const dateB = b.data.date?.valueOf() ?? 0;
+		return dateB - dateA;
+	})
+	.slice(0, 4);
+
+// Format date function
+const formatDate = (date: Date): string => {
+	return new Intl.DateTimeFormat("en-GB", {
+		day: "2-digit",
+		month: "2-digit",
+		year: "numeric",
+	}).format(date);
+};
 ---
 
-<Layout pageTitle={pageTitle}>
-	<span slot="nav">
-		<!--
-  			Example: To override the default navigation links, uncomment below and customize the links.
-  			When children are provided, the default links inside Navigation.astro will be replaced.
-		-->
-		<!-- <Navigation>
-			<a href="/" class="font-semibold uppercase btn">Home</a>
-			<a href="/about" class="font-semibold uppercase btn">About</a>
-			<a href="/contact" class="font-semibold uppercase btn">Contact</a>
-		</Navigation> -->
-		<Navigation />
-	</span>
+<Layout 
+	title="CJ Tomlin - Portfolio | Software Developer"
+	description="Portfolio of CJ Tomlin, a software developer showcasing projects, blog posts, and technical expertise. Explore my work in web development, programming, and technology."
+	type="website"
+>
+	<!-- Introduction Section -->
+	<section class="mb-12">
+		<h1 class="text-3xl font-bold mb-4 text-primary">Chris Tomlin</h1>
+		<p class="text-lg">
+			Graduate of Computer Science at De Montfort University. Currently
+			blogging, experimenting, and open to junior/grad roles in tech.
+		</p>
+	</section>
 
-	<div
-		class="flex flex-col md:flex-row md:divide-x-[2px] md:divide-[var(--border)] md:dark:divide-[var(--border)] gap-4 md:gap-0 p-6 h-full min-h-0"
-	>
-		<div class="overflow-auto p-4 w-full h-full md:w-1/4 min-h-0">
-			<h2 class="mb-4 text-lg font-bold uppercase">About</h2>
-			<p>
-				I’m a Computing graduate with hands-on experience across energy,
-				education, and non-profit sectors, working on everything from
-				real-time web applications to data validation pipelines.
-			</p>
-			<p class="mt-4">
-				I enjoy solving practical problems, learning new tools, and
-				working with teams to build things that matter. My interests
-				span DevOps, backend development, and security — and I’m
-				exploring roles where I can grow technically while contributing
-				to meaningful work.
-			</p>
-			<h3 class="mt-4 mb-2 font-bold uppercase text-md">Technologies</h3>
-			<div class="flex flex-wrap gap-2 mb-4">
-				<Badge variant="primary">Python</Badge>
-				<Badge variant="primary">JavaScript</Badge>
-				<Badge variant="primary">TypeScript</Badge>
-			</div>
-			<div class="flex flex-wrap gap-2 mb-4">
-				<Badge variant="info">Next.js</Badge>
-				<Badge variant="info">Node.js</Badge>
-				<Badge variant="info">Astro</Badge>
-				<Badge variant="info">FastAPI</Badge>
-				<Badge variant="info">Django</Badge>
-			</div>
-			<div class="flex flex-wrap gap-2 mb-4">
-				<Badge variant="error">React</Badge>
-				<Badge variant="error">TailwindCSS</Badge>
-				<Badge variant="error">Bootstrap</Badge>
-			</div>
-			<div class="flex flex-wrap gap-2 mb-4">
-				<Badge variant="warning">MySQL</Badge>
-				<Badge variant="warning">PostgreSQL</Badge>
-				<Badge variant="warning">MongoDB</Badge>
-			</div>
-			<div class="flex flex-wrap gap-2 mb-4">
-				<Badge variant="secondary">Docker</Badge>
-				<Badge variant="secondary">Github Actions</Badge>
-			</div>
-		</div>
-		<!-- Desktop Projects List -->
-		<div
-			class="hidden md:block overflow-auto p-4 w-full h-full md:w-1/4 min-h-0"
-		>
-			<h2 class="mb-4 text-lg font-bold uppercase">Projects</h2>
-			<div
-				id="project-list"
-				class="flex flex-col divide-y-[2px] divide-[var(--border)] dark:divide-[var(--border)] border-t-[2px] border-b-[2px] border-[var(--border)] dark:border-[var(--border)]"
+	<!-- Latest Blog Posts Section -->
+	<section class="mb-16">
+		<div class="flex justify-between items-center mb-4">
+			<h2 class="text-2xl font-bold">
+				Latest posts ({posts.length})
+			</h2>
+			<a href="/blog" class="text-sm text-primary hover:underline"
+				>See all posts</a
 			>
-				{
-					projects.map((project, idx) => (
-						<div
-							class="p-2 cursor-pointer flex justify-between items-center ease-in-out"
-							data-project-id={project.id}
-						>
-							<span class="font-bold uppercase transition-all duration-200">
-								{project.title}
-							</span>
-							<span class="text-xs uppercase">
-								{project.subtitle}
-							</span>
+		</div>
+
+		{
+			posts.length === 0 ? (
+				<p>No posts available yet. Check back soon!</p>
+			) : (
+				<div class="space-y-2">
+					{posts.map((post: BlogEntry, index: number) => (
+						<div class={`animate-delay-${(index + 1) * 100}`}>
+							<BlogPostCard post={post} formatDate={formatDate} />
 						</div>
-					))
-				}
-			</div>
-		</div>
-		<!-- Mobile Projects Accordion -->
-		<div class="block md:hidden w-full">
-			<h2 class="mb-4 px-4 text-lg font-bold uppercase">Projects</h2>
-			<Accordion>
-				{
-					projects.map((project, idx) => (
-						<AccordionItem
-							value={project.id}
-							class="border-l-0 border-r-0 rounded-none first:rounded-t-none last:rounded-b-none"
-						>
-							<AccordionTrigger>
-								<div class="flex justify-between w-full">
-									<span class="font-bold uppercase">
-										{project.title}
-									</span>
-								</div>
-							</AccordionTrigger>
-							<AccordionContent>
-								<span class="text-xs uppercase block mb-2">
-									{project.subtitle}
-								</span>
-								<p class="mb-2">{project.description}</p>
-								<div class="flex gap-2 mb-2">
-									<a
-										href={project.github}
-										target="_blank"
-										class="text-[var(--primary)] underline text-xs uppercase"
-									>
-										GitHub
-									</a>
-								</div>
-								{project.images &&
-									project.images.map((img) => (
-										<img
-											src={img}
-											alt={project.title}
-											class="mb-2 w-full rounded border border-[var(--border)] dark:border-[var(--border)]"
-										/>
-									))}
-							</AccordionContent>
-						</AccordionItem>
-					))
-				}
-			</Accordion>
-		</div>
-		<div
-			class="hidden md:flex py-2 px-4 w-full md:w-1/2 md:h-full md:flex-col min-h-0"
-		>
-			<div class="flex justify-between items-center mb-4">
-				<h2 class="text-lg font-bold uppercase">Project Details</h2>
-				<div class="flex gap-4">
-					<Link id="info-toggle" type="button" class="uppercase">
-						<span slot="text">Info</span>
-					</Link>
-					<Link
-						id="github-link"
-						href="#"
-						target="_blank"
-						class="uppercase"
-					>
-						<span slot="text">GitHub</span>
-					</Link>
+					))}
 				</div>
-			</div>
-			<div id="project-details" class="overflow-auto h-full">
-				<p id="project-details-placeholder">
-					Select a project to see details here.
-				</p>
-			</div>
+			)
+		}
+	</section>
+
+	<!-- Projects Section -->
+	<section id="projects" class="mt-16">
+		<div class="flex justify-between items-center mb-4">
+			<h2 class="text-2xl font-bold">Projects ({projects.length})</h2>
+			<a href="/projects" class="text-sm text-primary hover:underline"
+				>See all projects</a
+			>
 		</div>
-	</div>
-	<div id="projects-data" data-projects={projectsJson} style="display:none">
-	</div>
-	<script type="module" src="/scripts/project-details.js"></script>
+		<div class="space-y-2">
+			{
+				projects.map((project: ProjectEntry, index: number) => (
+					<div class={`animate-delay-${(index + 3) * 100}`}>
+						<ProjectCard project={project} />
+					</div>
+				))
+			}
+		</div>
+	</section>
 </Layout>

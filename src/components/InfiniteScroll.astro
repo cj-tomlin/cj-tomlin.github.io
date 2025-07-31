@@ -1,0 +1,239 @@
+---
+interface Props {
+    endpoint: string;
+    initialItems: any[];
+    itemType: "blog" | "project";
+    limit: number;
+}
+
+const { endpoint, initialItems, itemType, limit } = Astro.props;
+---
+
+<div
+    id="infinite-scroll-container"
+    data-endpoint={endpoint}
+    data-item-type={itemType}
+    data-limit={limit}
+>
+    <div id="items-container">
+        <!-- Initial items will be rendered by the parent page -->
+        <slot />
+    </div>
+
+    <!-- Loading indicator -->
+    <div id="loading-indicator" class="hidden text-center py-8">
+        <div
+            class="inline-flex items-center px-4 py-2 font-semibold leading-6 text-sm shadow rounded-md transition ease-in-out duration-150"
+        >
+            <svg
+                class="animate-spin -ml-1 mr-3 h-5 w-5"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+            >
+                <circle
+                    class="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    stroke-width="4"></circle>
+                <path
+                    class="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                ></path>
+            </svg>
+            Loading more...
+        </div>
+    </div>
+
+    <!-- End of content indicator -->
+    <div id="end-indicator" class="hidden text-center py-8 text-zinc-500">
+        <p>You've reached the end! 🎉</p>
+    </div>
+</div>
+
+<script>
+    class InfiniteScroll {
+        private container: HTMLElement;
+        private itemsContainer: HTMLElement;
+        private loadingIndicator: HTMLElement;
+        private endIndicator: HTMLElement;
+        private endpoint: string;
+        private itemType: "blog" | "project";
+        private limit: number;
+        private currentPage: number = 1;
+        private isLoading: boolean = false;
+        private hasMore: boolean = true;
+
+        constructor() {
+            this.container = document.getElementById(
+                "infinite-scroll-container",
+            )!;
+            this.itemsContainer = document.getElementById("items-container")!;
+            this.loadingIndicator =
+                document.getElementById("loading-indicator")!;
+            this.endIndicator = document.getElementById("end-indicator")!;
+
+            this.endpoint = this.container.dataset.endpoint!;
+            this.itemType = this.container.dataset.itemType as
+                | "blog"
+                | "project";
+            this.limit = parseInt(this.container.dataset.limit!);
+
+            this.init();
+        }
+
+        private init() {
+            // Set up intersection observer for infinite scroll
+            const observer = new IntersectionObserver(
+                (entries) => {
+                    if (
+                        entries[0].isIntersecting &&
+                        !this.isLoading &&
+                        this.hasMore
+                    ) {
+                        this.loadMore();
+                    }
+                },
+                { threshold: 0.1 },
+            );
+
+            observer.observe(this.loadingIndicator);
+        }
+
+        private async loadMore() {
+            if (this.isLoading || !this.hasMore) return;
+
+            this.isLoading = true;
+            this.showLoading();
+
+            try {
+                const nextPage = this.currentPage + 1;
+                const response = await fetch(
+                    `${this.endpoint}?page=${nextPage}&limit=${this.limit}`,
+                );
+                const data = await response.json();
+
+                if (data.posts || data.projects) {
+                    const items = data.posts || data.projects;
+                    this.renderItems(items);
+                    this.currentPage = nextPage;
+                    this.hasMore = data.hasMore;
+                }
+
+                if (!this.hasMore) {
+                    this.showEndIndicator();
+                }
+            } catch (error) {
+                console.error("Error loading more items:", error);
+            } finally {
+                this.isLoading = false;
+                this.hideLoading();
+            }
+        }
+
+        private renderItems(items: any[]) {
+            items.forEach((item) => {
+                const itemElement = this.createItemElement(item);
+                this.itemsContainer.appendChild(itemElement);
+            });
+        }
+
+        private createItemElement(item: any): HTMLElement {
+            const div = document.createElement("div");
+
+            if (this.itemType === "blog") {
+                div.innerHTML = `
+          <a href="/blog/${item.slug}" class="block group">
+            <div class="bg-card text-card-foreground rounded-md border shadow-sm">
+              <div class="p-4 pb-0">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-2">
+                    <h3 class="text-lg">${item.title}</h3>
+                    <span class="text-sm">•</span>
+                    <span class="text-sm">${item.publishDate}</span>
+                  </div>
+                  <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd"></path>
+                  </svg>
+                </div>
+              </div>
+              <div class="px-4 pt-0 pb-4">
+                <p class="line-clamp-2">${item.excerpt}</p>
+              </div>
+            </div>
+          </a>
+        `;
+            } else {
+                const tagsHtml = item.tags
+                    .map((tag: string) => `<span class="text-xs">${tag}</span>`)
+                    .join("");
+                const linkIcon = item.link
+                    ? `
+          <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd"></path>
+          </svg>
+        `
+                    : "";
+
+                if (item.link) {
+                    div.innerHTML = `
+            <a href="${item.link}" target="_blank" rel="noopener noreferrer" class="block group">
+              <div class="bg-card text-card-foreground rounded-md border shadow-sm hover:shadow-md transition-shadow">
+                <div class="p-4 pb-2">
+                  <div class="flex items-center justify-between">
+                    <div>
+                      <h3 class="text-lg group-hover:text-primary-blue transition-colors">${item.title}</h3>
+                      ${item.tags.length > 0 ? `<div class="flex flex-wrap gap-2 mt-1">${tagsHtml}</div>` : ""}
+                    </div>
+                    ${linkIcon}
+                  </div>
+                </div>
+                <div class="px-4 pt-0 pb-4">
+                  <p>${item.description}</p>
+                </div>
+              </div>
+            </a>
+          `;
+                } else {
+                    div.innerHTML = `
+            <div class="bg-card text-card-foreground rounded-md border shadow-sm hover:shadow-md transition-shadow">
+              <div class="p-4 pb-2">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <h3 class="text-lg">${item.title}</h3>
+                    ${item.tags.length > 0 ? `<div class="flex flex-wrap gap-2 mt-1">${tagsHtml}</div>` : ""}
+                  </div>
+                </div>
+              </div>
+              <div class="px-4 pt-0 pb-4">
+                <p>${item.description}</p>
+              </div>
+            </div>
+          `;
+                }
+            }
+
+            return div;
+        }
+
+        private showLoading() {
+            this.loadingIndicator.classList.remove("hidden");
+        }
+
+        private hideLoading() {
+            this.loadingIndicator.classList.add("hidden");
+        }
+
+        private showEndIndicator() {
+            this.endIndicator.classList.remove("hidden");
+        }
+    }
+
+    // Initialize when DOM is loaded
+    document.addEventListener("DOMContentLoaded", () => {
+        new InfiniteScroll();
+    });
+</script>

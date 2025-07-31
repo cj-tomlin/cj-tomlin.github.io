@@ -1,0 +1,29 @@
+# robots.txt for CJ Tomlin Portfolio
+# https://cj-tomlin.github.io
+
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://cj-tomlin.github.io/sitemap-index.xml
+Sitemap: https://cj-tomlin.github.io/sitemap-0.xml
+
+# Crawl delay (optional - helps prevent overloading)
+Crawl-delay: 1
+
+# Block access to admin/private areas (if any in future)
+# Disallow: /admin/
+# Disallow: /private/
+
+# Allow all major search engines
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /

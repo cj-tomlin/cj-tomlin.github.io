@@ -8,31 +8,11 @@
   "componentDir": "src/components",
   "components": [
     {
-      "name": "card",
-      "version": "1.1.0"
-    },
-    {
       "name": "button",
       "version": "2.0.1"
     },
     {
-      "name": "input",
-      "version": "1.1.1"
-    },
-    {
-      "name": "label",
-      "version": "1.1.1"
-    },
-    {
-      "name": "select",
-      "version": "1.2.0"
-    },
-    {
-      "name": "badge",
-      "version": "1.1.1"
-    },
-    {
-      "name": "accordion",
+      "name": "card",
       "version": "1.1.0"
     }
   ]

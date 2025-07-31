@@ -1,0 +1,54 @@
+---
+import type { CollectionEntry } from "astro:content";
+import {
+	Card,
+	CardContent,
+	CardHeader,
+	CardTitle,
+	CardDescription,
+} from "@/components/starwind/card";
+
+type BlogEntry = CollectionEntry<"blog">;
+
+interface Props {
+	post: BlogEntry;
+	formatDate: (date: Date) => string;
+}
+
+const { post, formatDate } = Astro.props;
+---
+
+<a href={`/blog/${post.slug}`} class="block group animate-fade-in-up focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-lg" aria-label={`Read blog post: ${post.data.title}`}>
+	<Card
+		class="hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 ease-in-out"
+	>
+		<CardHeader class="p-4 pb-0">
+			<div class="flex items-center justify-between">
+				<div class="flex items-center gap-2">
+					<CardTitle class="text-lg group-hover:text-primary transition-colors" role="heading" aria-level="2">
+						{post.data.title}
+					</CardTitle>
+					<time class="text-sm text-muted-foreground" datetime={post.data.publishDate.toISOString()}>
+						{formatDate(post.data.publishDate)}
+					</time>
+				</div>
+				<svg
+					class="w-5 h-5"
+					xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 20 20"
+					fill="currentColor"
+				>
+					<path
+						fill-rule="evenodd"
+						d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
+						clip-rule="evenodd"></path>
+				</svg>
+			</div>
+		</CardHeader>
+		<CardContent class="px-4 pt-0 pb-4">
+			<CardDescription class="line-clamp-2">
+				{post.data.excerpt}
+			</CardDescription>
+		</CardContent>
+	</Card>
+</a>

@@ -1,0 +1,103 @@
+---
+import type { CollectionEntry } from "astro:content";
+import {
+	Card,
+	CardContent,
+	CardHeader,
+	CardTitle,
+	CardDescription,
+} from "@/components/starwind/card";
+
+type ProjectEntry = CollectionEntry<"projects">;
+
+interface Props {
+	project: ProjectEntry;
+}
+
+const { project } = Astro.props;
+const hasLink = project.data.link;
+---
+
+{
+	hasLink ? (
+		<a
+			href={project.data.link}
+			target="_blank"
+			rel="noopener noreferrer"
+			class="block group animate-fade-in-up focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-lg"
+			aria-label={`View project: ${project.data.title} (opens in new tab)`}
+		>
+			<Card class="hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 ease-in-out">
+				<CardHeader class="p-4 pb-2">
+					<div class="flex items-center justify-between">
+						<div>
+							<CardTitle
+								class="text-lg group-hover:text-primary transition-colors"
+								role="heading"
+								aria-level="2"
+							>
+								{project.data.title}
+							</CardTitle>
+							{project.data.tags && (
+								<div
+									class="flex flex-wrap gap-2 mt-1"
+									role="list"
+								>
+									{project.data.tags.map((tag: string) => (
+										<span
+											class="text-xs px-2 py-1 bg-accent dark:bg-muted dark:text-foreground rounded-md"
+											role="listitem"
+											aria-label={`Technology: ${tag}`}
+										>
+											{tag}
+										</span>
+									))}
+								</div>
+							)}
+						</div>
+						<svg
+							class="w-5 h-5 group-hover:text-primary transition-colors"
+							xmlns="http://www.w3.org/2000/svg"
+							viewBox="0 0 20 20"
+							fill="currentColor"
+							aria-hidden="true"
+						>
+							<path
+								fill-rule="evenodd"
+								d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
+								clip-rule="evenodd"
+							/>
+						</svg>
+					</div>
+				</CardHeader>
+				<CardContent class="px-4 pt-0 pb-4">
+					<CardDescription>
+						{project.data.description}
+					</CardDescription>
+				</CardContent>
+			</Card>
+		</a>
+	) : (
+		<Card class="hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 ease-in-out animate-fade-in-up">
+			<CardHeader class="p-4 pb-2">
+				<div>
+					<CardTitle class="text-lg group-hover:text-primary transition-colors">
+						{project.data.title}
+					</CardTitle>
+					{project.data.tags && (
+						<div class="flex flex-wrap gap-2 mt-1">
+							{project.data.tags.map((tag: string) => (
+								<span class="text-xs px-2 py-1 bg-accent dark:bg-muted dark:text-foreground rounded-md">
+									{tag}
+								</span>
+							))}
+						</div>
+					)}
+				</div>
+			</CardHeader>
+			<CardContent class="px-4 pt-0 pb-4">
+				<CardDescription>{project.data.description}</CardDescription>
+			</CardContent>
+		</Card>
+	)
+}

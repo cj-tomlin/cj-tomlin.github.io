@@ -1,0 +1,62 @@
+---
+import { getCollection, type CollectionEntry } from "astro:content";
+import Layout from "@/layouts/Layout.astro";
+import BlogPostCard from "@/components/BlogPostCard.astro";
+import InfiniteScroll from "@/components/InfiniteScroll.astro";
+
+// Type definition for blog entries
+type BlogEntry = CollectionEntry<"blog">;
+
+// Get all blog posts from the content collection
+const allPosts = await getCollection("blog");
+
+// Filter and sort blog posts
+const sortedPosts = allPosts
+  .filter((post) => (import.meta.env.PROD ? !post.data.draft : true))
+  .sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf());
+
+// Initial page load - show first 6 posts
+const POSTS_PER_PAGE = 6;
+const initialPosts = sortedPosts.slice(0, POSTS_PER_PAGE);
+
+// Format date function
+const formatDate = (date: Date): string => {
+  return new Intl.DateTimeFormat("en-GB", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  }).format(date);
+};
+---
+
+<Layout 
+  title="Blog | CJ Tomlin - Software Developer"
+  description="Read my latest blog posts about software development, programming tutorials, tech insights, and project experiences. Stay updated with my thoughts on web development and technology."
+  type="website"
+>
+  <section>
+    <div class="flex justify-between items-center mb-8">
+      <h1 class="text-2xl font-bold">Latest posts ({sortedPosts.length})</h1>
+      <a href="/" class="text-sm text-primary hover:underline">Back to home</a>
+    </div>
+
+    <InfiniteScroll
+      endpoint="/api/blog.json"
+      initialItems={initialPosts}
+      itemType="blog"
+      limit={POSTS_PER_PAGE}
+    >
+      <div class="space-y-4">
+        {
+          initialPosts.length === 0 ? (
+            <p class="">No posts available yet. Check back soon!</p>
+          ) : (
+            initialPosts.map((post: BlogEntry) => (
+              <BlogPostCard post={post} formatDate={formatDate} />
+            ))
+          )
+        }
+      </div>
+    </InfiniteScroll>
+  </section>
+</Layout>

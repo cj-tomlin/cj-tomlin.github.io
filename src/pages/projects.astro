@@ -1,0 +1,66 @@
+---
+import { getCollection, type CollectionEntry } from "astro:content";
+import Layout from "@/layouts/Layout.astro";
+import ProjectCard from "@/components/ProjectCard.astro";
+import InfiniteScroll from "@/components/InfiniteScroll.astro";
+
+// Type definition for project entries
+type ProjectEntry = CollectionEntry<"projects">;
+
+// Get all projects from the content collection
+const allProjects: ProjectEntry[] = await getCollection("projects");
+
+// Sort projects by date (newest first)
+const sortedProjects = allProjects.sort((a, b) => {
+  const dateA = a.data.date?.valueOf() ?? 0;
+  const dateB = b.data.date?.valueOf() ?? 0;
+  return dateB - dateA;
+});
+
+// Initial page load - show first 8 projects
+const PROJECTS_PER_PAGE = 8;
+const initialProjects = sortedProjects.slice(0, PROJECTS_PER_PAGE);
+
+// Format date function
+const formatDate = (date: Date): string => {
+  return new Intl.DateTimeFormat("en-GB", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  }).format(date);
+};
+---
+
+<Layout 
+  title="Projects | CJ Tomlin - Software Developer"
+  description="Explore my software development projects, web applications, and technical work. See examples of my coding skills, problem-solving abilities, and project portfolio."
+  type="website"
+>
+  <section>
+    <div class="flex justify-between items-center mb-8">
+      <h1 class="text-2xl font-bold">Projects ({sortedProjects.length})</h1>
+      <a href="/" class="text-sm text-primary hover:underline">Back to home</a>
+    </div>
+
+    <InfiniteScroll
+      endpoint="/api/projects.json"
+      initialItems={initialProjects}
+      itemType="project"
+      limit={PROJECTS_PER_PAGE}
+    >
+      <div class="space-y-4">
+        {
+          initialProjects.length === 0 ? (
+            <p class="text-zinc-400">
+              No projects available yet. Check back soon!
+            </p>
+          ) : (
+            initialProjects.map((project: ProjectEntry) => (
+              <ProjectCard project={project} />
+            ))
+          )
+        }
+      </div>
+    </InfiniteScroll>
+  </section>
+</Layout>
