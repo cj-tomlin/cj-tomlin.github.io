@@ -1,191 +1,134 @@
 ---
 title: "Building This Site"
-excerpt: "A deep dive into the technologies, design decisions, and development process behind this portfolio website."
+excerpt: "Why I built this portfolio, the tools behind it, and how the content system works."
 publishDate: "2024-01-15"
-tags: ["astro", "tailwind", "typescript", "starwind-ui", "portfolio", "web-development"]
+tags:
+  [
+    "astro",
+    "tailwind",
+    "typescript",
+    "starwind-ui",
+    "portfolio",
+    "web-development",
+  ]
 ---
 
 # Building This Site
 
-I created this portfolio website to challenge myself in frontend development, and to have an opportunity to showcase my work. In this post, I'll walk you through the technologies, design decisions, and development process behind this very website you're reading.
+I built this site because I wanted a place to show my work — something simple, fast, and fully mine. I’d been meaning to try [Astro](https://astro.build/) for a while, and this felt like the perfect excuse.
 
-## The Tech Stack
+Astro ended up being exactly what I hoped for: a static site generator that doesn’t feel old school. It gave me fast builds, simple routing, and a content workflow that makes writing posts feel natural. Because it outputs static files, GitHub Pages is an easy (and free) deployment target.
 
-### Astro Framework
+What really clicked for me was Astro’s Content Collections. They let me define a schema for blog posts and projects, validate metadata automatically, and keep everything type-safe.
 
-At the heart of this portfolio is [Astro](https://astro.build/), a modern static site generator that caught my attention for several compelling reasons. As a relatively new framework that's been gaining significant traction in the web development community, I was eager to explore what made it special.
+## Goals
 
-**Why I chose Astro:**
+- **Fast**: ship static HTML with minimal JavaScript
+- **Easy to update**: add posts/projects by writing Markdown
+- **Low maintenance**: no CMS, no database, no admin UI
+- **Type-safe content**: metadata validated at build time
 
-- **Static-first approach**: Astro generates static HTML at build time, resulting in lightning-fast loading speeds and excellent SEO performance
-- **Content Collections**: This feature was perfect for organizing my blog posts and projects with type-safe schemas and automatic validation
-- **Zero-cost deployment**: The static output works seamlessly with GitHub Pages, allowing me to host the site completely free
-- **Performance by default**: Astro ships zero JavaScript by default, only hydrating components when absolutely necessary
+## The stack
 
-**Features I explored:**
-- **Content Collections API**: Used extensively for managing blog posts and project data with TypeScript validation
-- **File-based routing**: Simple and intuitive routing system that just works
-- **Component islands**: While I focused on native Astro components, the flexibility to use React, Vue, or Svelte components is incredibly appealing
+- **Astro** for static generation and routing
+- **TypeScript** for safer refactors and tooling
+- **Tailwind CSS** for styling
+- **Starwind UI** for consistent UI components
 
-What impressed me most was how Astro balances developer experience with performance. The build process is fast, the development server is responsive, and the final output is optimized without any additional configuration.
+## Theming and accessibility
 
-### Tailwind CSS v4
+Before I started building, I spent some time looking at different UI/UX frameworks. I ended up landing on Tailwind and Starwind UI because they let me move quickly while keeping the design consistent.
 
-For styling, I chose Tailwind CSS v4, and it proved to be an excellent decision. Tailwind's utility-first approach has become incredibly popular in the web development community, and for good reason.
+For theming, the goal was simple: define a color scheme once and have it work in both light and dark mode. I default to the user’s `prefers-color-scheme`, but I also added a manual toggle so you can override it.
 
-**Why Tailwind CSS v4:**
+Implementation-wise, I use Tailwind’s class-based dark mode strategy with `dark:` utilities (for example, `text-light dark:text-dark`). Utility classes plus a small set of reusable components made the theme feel consistent without fighting CSS.
 
-- **Astro integration**: Seamless setup with Astro's `@astrojs/tailwind` integration
-- **Rapid development**: Utility classes allow for quick prototyping and styling without context switching
-- **Consistency**: Predefined spacing, colors, and sizing scales ensure visual consistency across the site
-- **CSS-first configuration**: v4's new approach using `@theme` directives feels more natural than JavaScript config files
-- **Performance**: Automatic purging removes unused styles, keeping the final CSS bundle minimal
+Theming ties directly into accessibility, so I tried to make those decisions together:
 
-**What I particularly enjoyed:**
-- The new CSS variable system in v4 makes theming much more intuitive
-- Dark mode support with simple `dark:` prefixes
-- Responsive design with mobile-first breakpoints (`sm:`, `md:`, `lg:`)
-- The extensive ecosystem of pre-built components and patterns
+- **Contrast first**: picking colors that remain readable in both themes
+- **Clear focus states**: making keyboard navigation obvious (especially for links and buttons)
+- **Semantic HTML**: keeping the structure simple so tabbing and screen readers work well
 
-Tailwind's approach of "writing CSS in your HTML" initially felt unusual, but it quickly became second nature and significantly sped up my development process.
+I haven’t done a thorough accessibility review yet, but I tried to follow good practices early. Starwind UI’s components are based on shadcn/ui patterns, so they start from a pretty solid accessibility baseline.
 
-### StarwindUI Components
-To maintain consistency and accelerate development, I integrated [StarwindUI](https://starwind.dev/) components:
+## Content Collections (type-safe Markdown)
 
-- **Design system consistency**: Pre-built components that follow modern design principles
-- **Accessibility built-in**: ARIA labels and keyboard navigation out of the box
-- **Theme integration**: Seamless integration with Tailwind's design tokens
+Here’s the schema I’m using:
 
-I particularly liked that I could adopt its theming system with tailwindcss and easily theme my site and try out different colours by just editing the starwindui css file.
-
-### TypeScript
-The entire project is built with TypeScript for:
-
-- **Type safety**: Catch errors at compile time rather than runtime
-- **Better developer experience**: Enhanced IntelliSense and refactoring capabilities
-- **Content validation**: Type-safe content collections for blog posts and projects
-
-## Key Features Implemented
-
-### Content Management
-Using Astro's Content Collections API, I created a type-safe system for managing blog posts and projects:
-
-```typescript
-// Content collection schema
+```ts
 const blogCollection = defineCollection({
-  type: 'content',
+  type: "content",
   schema: z.object({
     title: z.string(),
     excerpt: z.string(),
-    publishDate: z.string(),
+    publishDate: z.string().transform((str) => new Date(str)),
     tags: z.array(z.string()).optional(),
+    draft: z.boolean().default(false),
   }),
 });
 ```
 
-### SEO Optimization
-A comprehensive SEO strategy was implemented including:
+Defining this means every post has a consistent structure, and Astro will warn me if I forget something. It feels more like writing than “managing content,” which is exactly what I wanted.
 
-- **Meta tags**: Title, description, and Open Graph data
-- **Structured data**: JSON-LD markup for better search engine understanding
-- **Sitemap generation**: Automatic sitemap.xml creation
-- **Robots.txt**: Proper crawler instructions
+Today, I use this metadata to generate previews on the homepage and blog page. I can extract the title, tags, and excerpt for cards, and use `publishDate` to sort posts chronologically.
 
-### Accessibility First
-Accessibility was a priority from day one:
+Longer-term, I’d like to generate a search index and add filtering by tag and timeframe. I also added a boolean for whether a post is a draft (and shouldn’t be displayed yet), which gives me the option to write ahead and publish later.
 
-- **Semantic HTML**: Proper use of headings, landmarks, and ARIA labels
-- **Keyboard navigation**: Full keyboard accessibility for all interactive elements
-- **Screen reader support**: Descriptive labels and skip navigation links
-- **Focus management**: Clear focus indicators and logical tab order
+On the content side, a blog post is just a Markdown file with frontmatter:
 
-### Performance Optimizations
-Several performance optimizations were implemented:
-
-- **Infinite scroll**: Pagination for blog and project listings
-- **Image optimization**: Astro's built-in image processing
-- **CSS optimization**: Minimal CSS with Tailwind's purging
-- **Static generation**: Pre-rendered pages for instant loading
-
-## Design Philosophy
-
-### Clean and Minimal
-The design follows a clean, minimal aesthetic that puts content first:
-
-- **Typography-focused**: Clear hierarchy with readable fonts
-- **Whitespace**: Generous spacing for better readability
-- **Color palette**: Subtle accent colors that don't distract from content
-
-### Dark Mode Support
-Full dark mode support was implemented using Tailwind's dark mode utilities:
-
-- **System preference detection**: Automatically matches user's system preference
-- **Manual toggle**: Theme switcher for user control
-- **Consistent theming**: All components adapt seamlessly to both modes
-
-### Responsive Design
-Mobile-first responsive design ensures the site works perfectly on all devices:
-
-- **Flexible layouts**: CSS Grid and Flexbox for adaptive layouts
-- **Responsive typography**: Fluid font sizes that scale with screen size
-- **Touch-friendly**: Appropriately sized touch targets for mobile users
-
-## Development Workflow
-
-### GitHub Actions Deployment
-Automated deployment to GitHub Pages using GitHub Actions:
-
-```yaml
-# Simplified workflow
-- name: Build with Astro
-  uses: withastro/action@v2
-- name: Deploy to GitHub Pages
-  uses: actions/deploy-pages@v4
+```md
+---
+title: "My Post"
+excerpt: "A short summary."
+publishDate: "2024-01-01"
+tags: ["example"]
+---
 ```
 
-### Content Creation
-A streamlined content creation process:
+Astro validates the metadata, and the rest is just Markdown. No CMS, no database, no complicated setup — just writing.
 
-1. **Markdown files**: Blog posts and project descriptions in Markdown
-2. **Frontmatter validation**: TypeScript schemas ensure consistent metadata
-3. **Hot reloading**: Instant preview during development
+Projects work the same way. Each one is a Markdown file with a small amount of frontmatter that describes the project:
 
-## Lessons Learned
+```md
+---
+title: "Nadex"
+tech: ["Rust", "egui"]
+link: "https://github.com/cj-tomlin/nadex"
+---
+```
 
-### Performance Matters
-Static site generation with Astro resulted in excellent Core Web Vitals scores. The combination of pre-rendering and minimal JavaScript creates an incredibly fast user experience.
-
-### Accessibility is Essential
-Building with accessibility in mind from the start is much easier than retrofitting it later. Tools like semantic HTML and ARIA labels should be part of the initial development process.
-
-### Component Consistency
-Using a design system like StarwindUI significantly speeds up development while maintaining visual consistency across the site.
-
-## Future Enhancements
-
-Looking ahead, there are several features I'd like to add:
-
-- **Search functionality**: Full-text search across blog posts and projects
-- **Comments**: Allow readers to leave comments on blog posts
-- **Tag filtering**: Allow users to filter blog posts and projects by tag
-
-## Conclusion
-
-Building this portfolio has been an incredibly rewarding journey that pushed me to explore modern web development technologies and best practices. The combination of Astro, Tailwind CSS, and TypeScript created a development experience that was both enjoyable and productive.
-
-**Key takeaways from this project:**
-
-- **Static site generators are powerful**: Astro's approach of generating static HTML while maintaining modern development patterns offers the best of both worlds
-- **Utility-first CSS works**: Tailwind's approach initially felt foreign, but it significantly accelerated development once I embraced it
-- **Accessibility matters**: Building with accessibility in mind from the start is much easier than retrofitting it later
-- **Performance is achievable**: With the right tools and approach, creating fast, lightweight websites is more accessible than ever
-
-This portfolio represents not just a showcase of my work, but also a demonstration of modern web development practices. The focus on performance, accessibility, and user experience reflects the standards I strive to meet in all my projects.
-
-Most importantly, this project reinforced my passion for frontend development and my excitement about the evolving landscape of web technologies. There's always something new to learn, and frameworks like Astro make that learning process both challenging and enjoyable.
-
-Whether you're a fellow developer, potential collaborator, or someone interested in web development, I hope this behind-the-scenes look provides valuable insights into the thought process and technical decisions that go into building a modern web portfolio.
+Astro uses this metadata to automatically generate project cards and pages. Keeping everything in Markdown means I don’t have to think about tooling when I want to add something new — I just write it and commit.
 
 ---
 
-*Want to see the code behind this site? Check out the [GitHub repository](https://github.com/cj-tomlin/cj-tomlin.github.io) to explore the implementation details.*
+## Deployment (GitHub Pages)
+
+Since the site builds to static assets, deployment is straightforward: the build output gets published to GitHub Pages.
+
+## Tradeoffs and constraints
+
+Keeping the site static simplifies hosting and performance, but it also shapes what features make sense:
+
+- **No server-side features by default**: anything like comments or dynamic search needs a third-party service or a build-time approach.
+- **Build-time is your friend**: content-driven features (feeds, tag pages, indexes) fit naturally.
+
+## The Result
+
+The final site is:
+
+- **Fast** — static HTML with minimal JavaScript
+- **Accessible** — semantic HTML, keyboard navigation, and clear focus states
+- **Clean** — a minimal design that puts content first
+- **Easy to maintain** — new posts and projects take seconds to add
+
+It’s intentionally uncomplicated, which makes it a great foundation for future work.
+
+The biggest thing I learned is that performance and accessibility aren’t big, scary tasks. If you think about them early, they become part of the workflow instead of chores at the end.
+
+---
+
+## What’s Next
+
+Next, I want to write more posts — especially about the homelab I’m building — and maybe add search or comments later. But for now, I’m happy with this foundation.
+
+If you’re curious, the code is on [GitHub](https://github.com/cj-tomlin/cj-tomlin.github.io).
