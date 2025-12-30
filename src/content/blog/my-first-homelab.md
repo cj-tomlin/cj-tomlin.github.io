@@ -3,7 +3,7 @@ title: "Building My Homelab"
 excerpt: "How I fixed terrible Wi‑Fi in an old house, built a custom router, and started self‑hosting with Proxmox."
 publishDate: "2025-12-30"
 tags: ["homelab", "networking", "opnsense", "proxmox", "self-hosting", "wifi"]
-draft: true
+draft: false
 ---
 
 # Building My Homelab
